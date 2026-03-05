@@ -33,4 +33,3 @@ COPY cursor_icon.png /cursor_icon.png
 # Expose ports and volumes
 EXPOSE 8080 8443
 VOLUME ["/config","/cursor"]
-```
