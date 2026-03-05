@@ -9,11 +9,12 @@ ENV DISPLAY=:1
 # Update and install necessary packages
 RUN echo "**** install packages ****" && \
     apt-get update && \
-    apt-get install -y --no-install-recommends curl fuse python3.11-venv libfuse2 python3-xdg libgtk-3-0 libnotify4 libatspi2.0-0 libsecret-1-0 libnss3 desktop-file-utils fonts-noto-color-emoji git ssh-askpass && \
+    apt-get install -y --no-install-recommends curl jq fuse python3.11-venv libfuse2 python3-xdg libgtk-3-0 libnotify4 libatspi2.0-0 libsecret-1-0 libnss3 desktop-file-utils fonts-noto-color-emoji git ssh-askpass && \
     apt-get autoclean && rm -rf /var/lib/apt/lists/* /var/tmp/* /tmp/*
 
 # Download latest Cursor AppImage automatically
-RUN curl --location --output Cursor.AppImage "https://www.cursor.com/api/download?platform=linux-x64&releaseTrack=stable" && \
+RUN CURSOR_URL=$(curl -s "https://www.cursor.com/api/download?platform=linux-x64&releaseTrack=stable" | jq -r '.downloadUrl') && \
+    curl --location --output Cursor.AppImage "$CURSOR_URL" && \
     chmod a+x Cursor.AppImage
 
 # Environment variables
@@ -32,3 +33,4 @@ COPY cursor_icon.png /cursor_icon.png
 # Expose ports and volumes
 EXPOSE 8080 8443
 VOLUME ["/config","/cursor"]
+```
