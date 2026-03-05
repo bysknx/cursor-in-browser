@@ -13,8 +13,8 @@ RUN echo "**** install packages ****" && \
     apt-get autoclean && rm -rf /var/lib/apt/lists/* /var/tmp/* /tmp/*
 
 # Download latest Cursor AppImage automatically
-RUN CURSOR_URL=$(curl -s "https://www.cursor.com/api/download?platform=linux-x64&releaseTrack=stable" | jq -r '.downloadUrl') && \
-    curl --location --output Cursor.AppImage "$CURSOR_URL" && \
+RUN CURSOR_URL=$(curl -s -L -H "User-Agent: Mozilla/5.0" "https://www.cursor.com/api/download?platform=linux-x64&releaseTrack=stable" | jq -r '.downloadUrl') && \
+    curl -L --output Cursor.AppImage "$CURSOR_URL" && \
     chmod a+x Cursor.AppImage
 
 # Environment variables
